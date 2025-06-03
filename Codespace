@@ -1,0 +1,71 @@
+# crypto_chatbot.py
+
+crypto_db = {
+    "Bitcoin": {
+        "price_trend": "rising",
+        "market_cap": "high",
+        "energy_use": "high",
+        "sustainability_score": 3/10
+    },
+    "Ethereum": {
+        "price_trend": "stable",
+        "market_cap": "high",
+        "energy_use": "medium",
+        "sustainability_score": 6/10
+    },
+    "Cardano": {
+        "price_trend": "rising",
+        "market_cap": "medium",
+        "energy_use": "low",
+        "sustainability_score": 8/10
+    }
+}
+
+def get_user_input():
+    return input("You: ").lower()
+
+def respond_to_query(user_query):
+    if "sustainable" in user_query:
+        recommend = max(crypto_db, key=lambda x: crypto_db[x]["sustainability_score"])
+        print(f"CryptoBuddy: Invest in {recommend}! 🌱 It’s eco-friendly and has long-term potential!")
+
+    elif "trending" in user_query or "rising" in user_query:
+        trending = [coin for coin, data in crypto_db.items() if data["price_trend"] == "rising"]
+        print(f"CryptoBuddy: Trending cryptos: {', '.join(trending)} 🚀")
+
+    elif "long-term" in user_query or "growth" in user_query:
+        for coin, data in crypto_db.items():
+            if data["price_trend"] == "rising" and data["sustainability_score"] > 0.7:
+                print(f"CryptoBuddy: {coin} is trending up and has a top-tier sustainability score! 🚀")
+                return
+        print("CryptoBuddy: Consider a balanced portfolio of profitable and sustainable coins.")
+
+    elif "high market cap" in user_query:
+        high_cap = [coin for coin, data in crypto_db.items() if data["market_cap"] == "high"]
+        print(f"CryptoBuddy: High market cap coins: {', '.join(high_cap)} 💰")
+
+    elif "advice" in user_query or "should i buy" in user_query:
+        candidates = [coin for coin, data in crypto_db.items() if data["price_trend"] == "rising" and data["market_cap"] == "high"]
+        if candidates:
+            print(f"CryptoBuddy: You might want to consider: {', '.join(candidates)} 💡")
+        else:
+            print("CryptoBuddy: No perfect matches found. Diversification is key!")
+
+    elif "bye" in user_query or "exit" in user_query:
+        print("CryptoBuddy: Bye! Remember—crypto is risky. Do your own research! 🔍")
+        return False
+
+    else:
+        print("CryptoBuddy: I'm still learning! Ask me about crypto trends, sustainability, or what to buy.")
+
+    return True
+
+def start_chatbot():
+    print("👋 Hello, I'm CryptoBuddy! Ask me anything about crypto investments.")
+    active = True
+    while active:
+        user_query = get_user_input()
+        active = respond_to_query(user_query)
+
+if __name__ == "__main__":
+    start_chatbot()
